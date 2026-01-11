@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Binance Spot Calculators (BD)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6">
+
+<h1 class="text-2xl font-semibold mb-6 text-center">
+  Binance Spot Trading Calculators — Bangladesh
+</h1>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+
+  <!-- BUY CALCULATOR -->
+  <section class="bg-slate-800 rounded-lg p-4">
+    <h2 class="font-semibold mb-3">🟦 Buy Decision Calculator</h2>
+
+    <input id="b_cur" placeholder="Current Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="b_sup" placeholder="Support Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="b_res" placeholder="Resistance Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="b_fee" placeholder="Fee %" value="0.1"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+
+    <button onclick="calcBuy()"
+      class="w-full bg-blue-500 text-black font-semibold py-2 rounded">
+      Evaluate BUY
+    </button>
+
+    <p id="buyResult" class="mt-3 font-bold"></p>
+  </section>
+
+  <!-- SELL CALCULATOR -->
+  <section class="bg-slate-800 rounded-lg p-4">
+    <h2 class="font-semibold mb-3">🟨 Sell Decision Calculator</h2>
+
+    <input id="s_buy" placeholder="Your Buy Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="s_cur" placeholder="Current Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="s_res" placeholder="Resistance Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="s_fee" placeholder="Fee %" value="0.1"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+
+    <button onclick="calcSell()"
+      class="w-full bg-yellow-400 text-black font-semibold py-2 rounded">
+      Evaluate SELL
+    </button>
+
+    <p id="sellResult" class="mt-3 font-bold"></p>
+  </section>
+
+  <!-- PROFIT CALCULATOR -->
+  <section class="bg-slate-800 rounded-lg p-4">
+    <h2 class="font-semibold mb-3">🟩 Profit Calculator</h2>
+
+    <input id="p_buy" placeholder="Buy Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="p_sell" placeholder="Sell / Current Price"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="p_qty" placeholder="Quantity"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="p_fee" placeholder="Fee %" value="0.1"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+    <input id="p_rate" placeholder="USDT → BDT" value="122"
+      class="w-full mb-2 p-2 bg-slate-700 rounded">
+
+    <button onclick="calcProfit()"
+      class="w-full bg-green-500 text-black font-semibold py-2 rounded">
+      Calculate Profit
+    </button>
+
+    <p id="profitResult" class="mt-3 font-bold"></p>
+  </section>
+
+</div>
+
+
+<!-- DECISION & PSYCHOLOGY PANEL -->
+<section class="max-w-7xl mx-auto mt-10 bg-slate-800 rounded-lg p-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
+
+    <!-- BEFORE TRADE -->
+    <div class="border border-slate-700 rounded p-4">
+      <h3 class="font-semibold mb-2 text-blue-400">
+        Before You Trade
+      </h3>
+      <ul class="space-y-1 text-slate-300">
+        <li>✔ Price near support or resistance?</li>
+        <li>✔ Calculator says BUY or SELL?</li>
+        <li>✔ Target &gt; fees?</li>
+        <li>✔ I am calm, not bored?</li>
+        <li class="text-red-400">✘ Chasing candles?</li>
+      </ul>
+    </div>
+
+    <!-- AFTER WIN -->
+    <div class="border border-slate-700 rounded p-4">
+      <h3 class="font-semibold mb-2 text-green-400">
+        After a Win
+      </h3>
+      <ul class="space-y-1 text-slate-300">
+        <li>✔ Stop trading for a while</li>
+        <li>✔ Do NOT increase position size</li>
+        <li>✔ Market didn’t reward skill alone</li>
+        <li class="text-red-400">✘ “I can’t lose today”</li>
+      </ul>
+    </div>
+
+    <!-- AFTER LOSS -->
+    <div class="border border-slate-700 rounded p-4">
+      <h3 class="font-semibold mb-2 text-yellow-400">
+        After a Loss
+      </h3>
+      <ul class="space-y-1 text-slate-300">
+        <li>✔ Loss is normal</li>
+        <li>✔ Stop trading for the day</li>
+        <li>✔ Review rule-breaking</li>
+        <li class="text-red-400">✘ Revenge trade</li>
+      </ul>
+    </div>
+
+    <!-- RISK REALITY -->
+    <div class="border border-slate-700 rounded p-4">
+      <h3 class="font-semibold mb-2 text-red-400">
+        Risk Reality
+      </h3>
+      <ul class="space-y-1 text-slate-300">
+        <li>• No setup = no trade</li>
+        <li>• Capital protection &gt; profit</li>
+        <li>• Missed trades don’t matter</li>
+        <li>• Survival is success</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+function calcBuy() {
+  const cur = +b_cur.value;
+  const sup = +b_sup.value;
+  const res = +b_res.value;
+
+  const risk = cur - sup;
+  const reward = res - cur;
+
+  buyResult.textContent =
+    reward > risk * 1.5
+      ? "🟢 BUY — Reward outweighs risk"
+      : "🔴 WAIT — Risk too high";
+}
+
+function calcSell() {
+  const buy = +s_buy.value;
+  const cur = +s_cur.value;
+  const res = +s_res.value;
+  const fee = +s_fee.value / 100;
+
+  const remaining = res - cur;
+  const feeRisk = cur * fee * 2;
+
+  sellResult.textContent =
+    remaining < feeRisk
+      ? "🟢 SELL — Upside too small"
+      : "🟡 HOLD — Still room to move";
+}
+
+function calcProfit() {
+  const buy = +p_buy.value;
+  const sell = +p_sell.value;
+  const qty = +p_qty.value;
+  const fee = +p_fee.value / 100;
+  const rate = +p_rate.value;
+
+  const buyVal = buy * qty;
+  const sellVal = sell * qty;
+  const fees = (buyVal + sellVal) * fee;
+  const net = (sellVal - buyVal - fees) * rate;
+
+  profitResult.textContent =
+    net >= 0
+      ? `🟢 Profit: ৳ ${net.toFixed(0)}`
+      : `🔴 Loss: ৳ ${Math.abs(net).toFixed(0)}`;
+}
+</script>
+
+</body>
+</html>
